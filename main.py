@@ -39,7 +39,7 @@ def get_exe_path(app: str) -> str:
     for subdir, dirs, files in os.walk(start_menu):
         if not(subdir.startswith('Windows')):
             for file in files:
-                if file.endswith('lnk'):
+                if file.endswith('.lnk'):
                     print(get_shortcut_path(f'{subdir}/{file}'))
 
 def open_app(app: str) -> None:
@@ -47,15 +47,15 @@ def open_app(app: str) -> None:
         subprocess.run(app)
     except:
         Tk().withdraw()
-        path = askopenfilename(title=f'Escolha o arquivo executável para {app}', initialdir='C:/', filetypes=[('Arquivo executável', '*.exe')])
+        path = askopenfilename(title=f'Escolha o arquivo executável para {app}', initialdir=Path.home(), filetypes=[('Arquivo executável', '*.exe')])
         os.startfile(path)
         username = getpass.getuser()
         with open(f'doc/mem/{username}.txt', 'w+') as log:
             log.write(f'{app}=={path}')
 
 def main():
-    #open_app()
-    get_exe_path('Discord')
+    open_app('Discord')
+    #get_exe_path('Discord')
 
 if __name__ == '__main__':
     main()
