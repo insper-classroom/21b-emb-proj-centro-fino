@@ -1,13 +1,14 @@
-src/ASF/sam/drivers/tc/tc.d src/ASF/sam/drivers/tc/tc.o: \
- ../src/ASF/sam/drivers/tc/tc.c \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\assert.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\_ansi.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\newlib.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\_newlib_version.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\config.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine\ieeefp.h \
+src/oled/gfx_mono_framebuffer.d src/oled/gfx_mono_framebuffer.o: \
+ ../src/oled/gfx_mono_framebuffer.c ../src/oled/gfx_mono_framebuffer.h \
+ ../src/oled/gfx_mono.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stdint.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\stdint.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine\_default_types.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\features.h \
- ../src/ASF/sam/drivers/tc/tc.h ../src/ASF/sam/utils/compiler.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\_newlib_version.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\_intsup.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\_stdint.h \
+ ../src/ASF/sam/utils/compiler.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stddef.h \
  ../src/ASF/common/utils/parts.h \
  ../src/ASF/sam/utils/preprocessor/preprocessor.h \
@@ -18,11 +19,6 @@ src/ASF/sam/drivers/tc/tc.d src/ASF/sam/drivers/tc/tc.o: \
  ../src/ASF/sam/utils/header_files/io.h \
  ../src/ASF/sam/utils/cmsis/same70/include/same70.h \
  ../src/ASF/sam/utils/cmsis/same70/include/same70q21.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stdint.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\stdint.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine\_default_types.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\_intsup.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\_stdint.h \
  ../src/ASF/thirdparty/CMSIS/Include/core_cm7.h \
  ../src/ASF/thirdparty/CMSIS/Include/core_cmInstr.h \
  ../src/ASF/thirdparty/CMSIS/Include/core_cmFunc.h \
@@ -119,6 +115,10 @@ src/ASF/sam/drivers/tc/tc.d src/ASF/sam/drivers/tc/tc.o: \
  ../src/ASF/sam/utils/cmsis/same70/include/instance/uart4.h \
  ../src/ASF/sam/utils/cmsis/same70/include/pio/same70q21.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\stdio.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\_ansi.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\newlib.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\config.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine\ieeefp.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\cdefs.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stdarg.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\reent.h \
@@ -142,23 +142,80 @@ src/ASF/sam/drivers/tc/tc.d src/ASF/sam/drivers/tc/tc.o: \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine\stdlib.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\alloca.h \
  ../src/ASF/common/utils/interrupt.h \
- ../src/ASF/common/utils/interrupt/interrupt_sam_nvic.h
+ ../src/ASF/common/utils/interrupt/interrupt_sam_nvic.h \
+ ../src/oled/gfx_mono_generic.h ../src/oled/gfx_mono_ug_2832hsweg04.h \
+ ../src/oled/ssd1306.h ../src/asf.h ../src/ASF/sam/drivers/afec/afec.h \
+ ../src/ASF/sam/utils/status_codes.h \
+ ../src/ASF/common/services/delay/delay.h \
+ ../src/ASF/common/services/clock/sysclk.h ../src/config/conf_clock.h \
+ ../src/ASF/common/services/clock/same70/sysclk.h \
+ ../src/ASF/common/services/clock/osc.h \
+ ../src/ASF/common/services/clock/same70/osc.h \
+ ../src/ASF/common/boards/board.h \
+ ../src/ASF/sam/boards/same70_xplained/same70_xplained.h \
+ ../src/ASF/sam/drivers/pmc/pmc.h ../src/ASF/common/services/clock/pll.h \
+ ../src/ASF/common/services/clock/same70/pll.h \
+ ../src/ASF/common/services/delay/sam/cycle_counter.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/FreeRTOS.h \
+ ../src/config/FreeRTOSConfig.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/projdefs.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/portable.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/deprecated_definitions.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/portable/GCC/ARM_CM7/r0p1/portmacro.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/mpu_wrappers.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/StackMacros.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/croutine.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/list.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/deprecated_definitions.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/event_groups.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/timers.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/task.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/list.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/mpu_wrappers.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/portable.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/projdefs.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/queue.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/semphr.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/queue.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/task.h \
+ ../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/timers.h \
+ ../src/ASF/common/services/gpio/gpio.h \
+ ../src/ASF/common/services/gpio/sam_gpio/sam_gpio.h \
+ ../src/ASF/sam/drivers/pio/pio.h \
+ ../src/ASF/common/services/ioport/ioport.h \
+ ../src/ASF/common/services/ioport/sam/ioport_pio.h \
+ ../src/ASF/sam/drivers/mpu/mpu.h ../src/ASF/sam/drivers/pmc/sleep.h \
+ ../src/ASF/sam/utils/fpu/fpu.h \
+ ../src/ASF/sam/boards/same70_xplained/led.h \
+ ../src/ASF/sam/drivers/spi/spi.h \
+ ../src/ASF/common/services/sleepmgr/sam/sleepmgr.h \
+ ../src/config/conf_sleepmgr.h \
+ ../src/ASF/common/services/sleepmgr/sleepmgr.h \
+ ../src/ASF/common/services/sleepmgr/sam/sleepmgr.h \
+ ../src/ASF/common/utils/stdio/stdio_serial/stdio_serial.h \
+ ../src/ASF/common/services/serial/serial.h \
+ ../src/ASF/common/services/serial/sam_uart/uart_serial.h \
+ ../src/ASF/sam/drivers/uart/uart.h ../src/ASF/sam/drivers/usart/usart.h \
+ ../src/config/conf_uart_serial.h \
+ ../src/ASF/sam/drivers/pio/pio_handler.h ../src/config/conf_board.h
 
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\assert.h:
+../src/oled/gfx_mono_framebuffer.h:
 
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\_ansi.h:
+../src/oled/gfx_mono.h:
 
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\newlib.h:
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stdint.h:
 
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\_newlib_version.h:
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\stdint.h:
 
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\config.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine\ieeefp.h:
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine\_default_types.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\features.h:
 
-../src/ASF/sam/drivers/tc/tc.h:
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\_newlib_version.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\_intsup.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\_stdint.h:
 
 ../src/ASF/sam/utils/compiler.h:
 
@@ -181,16 +238,6 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gc
 ../src/ASF/sam/utils/cmsis/same70/include/same70.h:
 
 ../src/ASF/sam/utils/cmsis/same70/include/same70q21.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stdint.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\stdint.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine\_default_types.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\_intsup.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\_stdint.h:
 
 ../src/ASF/thirdparty/CMSIS/Include/core_cm7.h:
 
@@ -384,6 +431,14 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\stdio.h:
 
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\_ansi.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\newlib.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\config.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine\ieeefp.h:
+
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\sys\cdefs.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\lib\gcc\arm-none-eabi\6.3.1\include\stdarg.h:
@@ -431,3 +486,129 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 ../src/ASF/common/utils/interrupt.h:
 
 ../src/ASF/common/utils/interrupt/interrupt_sam_nvic.h:
+
+../src/oled/gfx_mono_generic.h:
+
+../src/oled/gfx_mono_ug_2832hsweg04.h:
+
+../src/oled/ssd1306.h:
+
+../src/asf.h:
+
+../src/ASF/sam/drivers/afec/afec.h:
+
+../src/ASF/sam/utils/status_codes.h:
+
+../src/ASF/common/services/delay/delay.h:
+
+../src/ASF/common/services/clock/sysclk.h:
+
+../src/config/conf_clock.h:
+
+../src/ASF/common/services/clock/same70/sysclk.h:
+
+../src/ASF/common/services/clock/osc.h:
+
+../src/ASF/common/services/clock/same70/osc.h:
+
+../src/ASF/common/boards/board.h:
+
+../src/ASF/sam/boards/same70_xplained/same70_xplained.h:
+
+../src/ASF/sam/drivers/pmc/pmc.h:
+
+../src/ASF/common/services/clock/pll.h:
+
+../src/ASF/common/services/clock/same70/pll.h:
+
+../src/ASF/common/services/delay/sam/cycle_counter.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/FreeRTOS.h:
+
+../src/config/FreeRTOSConfig.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/projdefs.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/portable.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/deprecated_definitions.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/portable/GCC/ARM_CM7/r0p1/portmacro.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/mpu_wrappers.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/StackMacros.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/croutine.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/list.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/deprecated_definitions.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/event_groups.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/timers.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/task.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/list.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/mpu_wrappers.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/portable.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/projdefs.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/queue.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/semphr.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/queue.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/task.h:
+
+../src/ASF/thirdparty/freertos/freertos-8.2.3/Source/include/timers.h:
+
+../src/ASF/common/services/gpio/gpio.h:
+
+../src/ASF/common/services/gpio/sam_gpio/sam_gpio.h:
+
+../src/ASF/sam/drivers/pio/pio.h:
+
+../src/ASF/common/services/ioport/ioport.h:
+
+../src/ASF/common/services/ioport/sam/ioport_pio.h:
+
+../src/ASF/sam/drivers/mpu/mpu.h:
+
+../src/ASF/sam/drivers/pmc/sleep.h:
+
+../src/ASF/sam/utils/fpu/fpu.h:
+
+../src/ASF/sam/boards/same70_xplained/led.h:
+
+../src/ASF/sam/drivers/spi/spi.h:
+
+../src/ASF/common/services/sleepmgr/sam/sleepmgr.h:
+
+../src/config/conf_sleepmgr.h:
+
+../src/ASF/common/services/sleepmgr/sleepmgr.h:
+
+../src/ASF/common/services/sleepmgr/sam/sleepmgr.h:
+
+../src/ASF/common/utils/stdio/stdio_serial/stdio_serial.h:
+
+../src/ASF/common/services/serial/serial.h:
+
+../src/ASF/common/services/serial/sam_uart/uart_serial.h:
+
+../src/ASF/sam/drivers/uart/uart.h:
+
+../src/ASF/sam/drivers/usart/usart.h:
+
+../src/config/conf_uart_serial.h:
+
+../src/ASF/sam/drivers/pio/pio_handler.h:
+
+../src/config/conf_board.h:
