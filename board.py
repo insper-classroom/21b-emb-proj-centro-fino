@@ -90,7 +90,7 @@ class SerialControllerInterface:
         valor_lido = ''
         list_received_data = []
         is_eop = False
-        
+
         while not is_eop:
             valor_lido = self.ser.read(size=1)
             is_eop = (valor_lido == b'X')
@@ -104,6 +104,10 @@ class SerialControllerInterface:
                 # print('\n')
 
         print(list_received_data)
+        if list_received_data[0] == b'P':
+            valor_byte = list_received_data[1]
+            valor = int.from_bytes(valor_byte, byteorder="little")
+            print(f'Valor potenciometro: {valor}')
         print('Next package \n')
 
 

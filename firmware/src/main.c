@@ -245,8 +245,6 @@ void but4_callback() {
 /************************************************************************/
 
 static void task_oled(void *pvParameters) {
-	gfx_mono_ssd1306_init();
-	gfx_mono_draw_string("Exemplo RTOS", 0, 0, &sysfont);
 	
 	adcData adc;
 	
@@ -453,23 +451,30 @@ void task_bluetooth(void) {
 			usart_write(USART_COM, eof);
 		}
 		
-		//if (xQueueReceive(xQueueADC, &(adc), (TickType_t)100 / portTICK_PERIOD_MS)){
-			//while(!usart_is_tx_ready(USART_COM)) {
-				//vTaskDelay(10 / portTICK_PERIOD_MS);
-			//}
-			//usart_write(USART_COM, 'P');
-//
-			//while(!usart_is_tx_ready(USART_COM)) {
-				//vTaskDelay(10 / portTICK_PERIOD_MS);
-			//}
-//
-			//usart_write(USART_COM, adc.value);
-			//while(!usart_is_tx_ready(USART_COM)) {
-				//vTaskDelay(10 / portTICK_PERIOD_MS);
-			//}
-			//usart_write(USART_COM, eof);
-//
-		//}
+		
+		if (xQueueReceive(xQueueADC, &(adc), (TickType_t)100 / portTICK_PERIOD_MS)) {
+			//Busca um novo valor na fila do ADC!
+			char b[512];
+			sprintf(b, "%04d", adc.value);
+			gfx_mono_draw_string(b, 0, 20, &sysfont);
+			
+			while(!usart_is_tx_ready(USART_COM)) {
+				vTaskDelay(10 / portTICK_PERIOD_MS);
+			}
+			usart_write(USART_COM, 'P');
+			
+			while(!usart_is_tx_ready(USART_COM)) {
+				vTaskDelay(10 / portTICK_PERIOD_MS);
+			}
+
+
+			usart_write(USART_COM, adc.value);
+			
+			while(!usart_is_tx_ready(USART_COM)) {
+				vTaskDelay(10 / portTICK_PERIOD_MS);
+			}
+			usart_write(USART_COM, eof);
+		}
 		
 		// dorme por 500 ms
 		vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -486,6 +491,10 @@ int main(void) {
 	/* Initialize the SAM system */
 	sysclk_init();
 	board_init();
+	gfx_mono_ssd1306_init();
+	gfx_mono_draw_string("Exemplo RTOS", 0, 0, &sysfont);
+	
+
 
 	/* Initialize the console uart */
 	configure_console();
@@ -502,9 +511,9 @@ int main(void) {
 		
 
 	/* Create task to control oled */
-	if (xTaskCreate(task_oled, "oled", TASK_OLED_STACK_SIZE, NULL, TASK_OLED_STACK_PRIORITY, NULL) != pdPASS) {
-	  printf("Failed to create oled task\r\n");
-	}
+	//if (xTaskCreate(task_oled, "oled", TASK_OLED_STACK_SIZE, NULL, TASK_OLED_STACK_PRIORITY, NULL) != pdPASS) {
+	  //printf("Failed to create oled task\r\n");
+	//}
 
 	/* Create task to handler LCD */
 	
