@@ -18,6 +18,8 @@
 #define LED_IDX      8
 #define LED_IDX_MASK (1 << LED_IDX)
 
+
+
 /* Botao da placa */
 #define BUT_PIO     PIOA
 #define BUT_PIO_ID  ID_PIOA
@@ -78,12 +80,18 @@ typedef struct {
 	uint value;
 } adcData;
 
+typedef struct{
+	uint button;
+	int status;
+} press;
 
 /************************************************************************/
 /* Globals                                                              */
 /************************************************************************/
 
 QueueHandle_t xQueueADC;
+QueueHandle_t xQueueBut;
+
 SemaphoreHandle_t xSemaphore;
 
 /** The conversion data is done flag */
@@ -100,8 +108,12 @@ extern void vApplicationMallocFailedHook(void);
 extern void xPortSysTickHandler(void);
 
 /** prototypes */
-void but_callback(void);
 static void BUT_init(void);
+void but1_callback(void);
+void but2_callback(void);
+void but3_callback(void);
+void but4_callback(void);
+
 
 /************************************************************************/
 /* RTOS application funcs                                               */
@@ -202,11 +214,31 @@ void config_usart0(void) {
 	pio_configure(PIOB, PIO_PERIPH_C, (1 << 1), PIO_DEFAULT);
 }
 
-
-
-
-void but_callback(void) {
+void but1_callback(void) {
+	press press1;
+	press1.button = 1;
+	press1.status = !pio_get(BUT1_PIO, PIO_INPUT, BUT1_IDX_MASK);
+	xQueueSendFromISR(xQueueBut, &press1, 0);
 }
+void but2_callback() {
+	press press2;
+	press2.button = 2;
+	press2.status = !pio_get(BUT2_PIO, PIO_INPUT, BUT2_IDX_MASK);
+	xQueueSendFromISR( xQueueBut, &press2, 0);	
+}
+void but3_callback() {
+	press press3;
+	press3.button = 3;
+	press3.status = !pio_get(BUT3_PIO, PIO_INPUT, BUT3_IDX_MASK);
+	xQueueSendFromISR( xQueueBut, &press3, 0);	
+}
+void but4_callback() {
+	press press4;
+	press4.button = 4;
+	press4.status = !pio_get(BUT4_PIO, PIO_INPUT, BUT4_IDX_MASK);
+	xQueueSendFromISR( xQueueBut, &press4, 0);	
+}
+
 
 /************************************************************************/
 /* TASKS                                                                */
@@ -257,12 +289,44 @@ void io_init(void) {
 
 	// Configura Pinos
 	pio_configure(LED_PIO, PIO_OUTPUT_0, LED_IDX_MASK, PIO_DEFAULT | PIO_DEBOUNCE);
+	
 	pio_configure(BUT1_PIO, PIO_INPUT, BUT1_IDX_MASK, PIO_PULLUP);
 	pio_configure(BUT2_PIO, PIO_INPUT, BUT2_IDX_MASK, PIO_PULLUP);
 	pio_configure(BUT3_PIO, PIO_INPUT, BUT3_IDX_MASK, PIO_PULLUP);
 	pio_configure(BUT4_PIO, PIO_INPUT, BUT4_IDX_MASK, PIO_PULLUP);	
+	
+	pio_handler_set(BUT1_PIO, BUT1_PIO_ID, BUT1_IDX_MASK, PIO_IT_FALL_EDGE, but1_callback);
+	pio_handler_set(BUT2_PIO, BUT2_PIO_ID, BUT2_IDX_MASK, PIO_IT_FALL_EDGE, but2_callback);
+	pio_handler_set(BUT3_PIO, BUT3_PIO_ID, BUT3_IDX_MASK, PIO_IT_FALL_EDGE, but3_callback);
+	pio_handler_set(BUT4_PIO, BUT4_PIO_ID, BUT4_IDX_MASK, PIO_IT_FALL_EDGE, but4_callback);
+	
+	pio_set_debounce_filter(BUT1_PIO, BUT1_IDX_MASK, 60);
+	pio_set_debounce_filter(BUT2_PIO, BUT2_IDX_MASK, 60);
+	pio_set_debounce_filter(BUT3_PIO, BUT3_IDX_MASK, 60);
+	pio_set_debounce_filter(BUT4_PIO, BUT4_IDX_MASK, 60);
+
+	pio_enable_interrupt(BUT1_PIO, BUT1_IDX_MASK);
+	pio_enable_interrupt(BUT2_PIO, BUT2_IDX_MASK);
+	pio_enable_interrupt(BUT3_PIO, BUT3_IDX_MASK);
+	pio_enable_interrupt(BUT4_PIO, BUT4_IDX_MASK);
+
+	/* configura prioridae */
+	NVIC_EnableIRQ(BUT1_PIO_ID);
+	NVIC_EnableIRQ(BUT2_PIO_ID);
+	NVIC_EnableIRQ(BUT3_PIO_ID);
+	NVIC_EnableIRQ(BUT4_PIO_ID);
+
+	NVIC_SetPriority(BUT1_PIO_ID, 4);
+	NVIC_SetPriority(BUT2_PIO_ID, 4);
+	NVIC_SetPriority(BUT3_PIO_ID, 4);
+	NVIC_SetPriority(BUT4_PIO_ID, 4);
 }
 
+static void BUT_init(void) {
+
+
+	/* conf botão como entrada */
+}
 
 static void config_AFEC_pot(Afec *afec, uint32_t afec_id, uint32_t afec_channel, afec_callback_t callback){
   /*************************************
@@ -310,10 +374,10 @@ static void config_AFEC_pot(Afec *afec, uint32_t afec_id, uint32_t afec_channel,
 
 static void configure_console(void) {
 	const usart_serial_options_t uart_serial_options = {
-		.baudrate = CONF_UART_BAUDRATE,
+		.baudrate   = CONF_UART_BAUDRATE,
 		.charlength = CONF_UART_CHAR_LENGTH,
 		.paritytype = CONF_UART_PARITY,
-		.stopbits = CONF_UART_STOP_BITS,
+		.stopbits   = CONF_UART_STOP_BITS,
 	};
 
 	/* Configure console UART. */
@@ -323,17 +387,7 @@ static void configure_console(void) {
 	setbuf(stdout, NULL);
 }
 
-static void BUT_init(void) {
-	/* configura prioridae */
-	NVIC_EnableIRQ(BUT_PIO_ID);
-	NVIC_SetPriority(BUT_PIO_ID, 4);
 
-	/* conf botão como entrada */
-	pio_configure(BUT_PIO, PIO_INPUT, BUT_PIO_PIN_MASK, PIO_PULLUP | PIO_DEBOUNCE);
-	pio_set_debounce_filter(BUT_PIO, BUT_PIO_PIN_MASK, 60);
-	pio_enable_interrupt(BUT_PIO, BUT_PIO_PIN_MASK);
-	pio_handler_set(BUT_PIO, BUT_PIO_ID, BUT_PIO_PIN_MASK, PIO_IT_FALL_EDGE , but_callback);
-}
 
 /************************************************************************/
 /* TASKS                                                                */
@@ -349,7 +403,6 @@ void task_adc(void){
 	afec_start_software_conversion(AFEC_POT);
 	
 	adcData adc;
-	xSemaphore = xSemaphoreCreateBinary();
 
 	while(1){
 		if(xSemaphoreTake(xSemaphore, 0)){
@@ -357,7 +410,6 @@ void task_adc(void){
 			
 			adc.value = g_ul_value;
 			xQueueSend(xQueueADC, &adc, 0);
-			
 			vTaskDelay(500);
 
 			/* Selecina canal e inicializa conversão */
@@ -376,43 +428,35 @@ void task_bluetooth(void) {
 
 	// configura LEDs e Botões
 	io_init();
+	
+	press press_main;
+
 
 	char button1 = '0';
 	char eof = 'X';
 
 	// Task não deve retornar.
 	while(1) {
-		// atualiza valor do botão
-		if(pio_get(BUT1_PIO, PIO_INPUT, BUT1_IDX_MASK) == 0) {
-			button1 = '1';
-		}
-		else if (pio_get(BUT2_PIO, PIO_INPUT, BUT2_IDX_MASK) == 0) {
-			button1 = '2';
-		}
-		
-		else if (pio_get(BUT3_PIO, PIO_INPUT, BUT3_IDX_MASK) == 0) {
-			button1 = '3';
-		}
-		
-		else if (pio_get(BUT4_PIO, PIO_INPUT, BUT4_IDX_MASK) == 0) {
-			button1 = '4';
-		}
-		else {
-			button1 = '0';
-		}
+				
+		if (xQueueReceive(xQueueBut, &(press_main), ( TickType_t )  1 / portTICK_PERIOD_MS)) {
+			printf("Button: %d   Status: %d\n", press_main.button, press_main.status);
+			while(!usart_is_tx_ready(USART_COM)) {
+				vTaskDelay(10 / portTICK_PERIOD_MS);
+			}
+			usart_write(USART_COM, press_main.button);
+			
+			while(!usart_is_tx_ready(USART_COM)) {
+				vTaskDelay(10 / portTICK_PERIOD_MS);
+			}
+			usart_write(USART_COM, press_main.status);
 
-		// envia status botão
-		while(!usart_is_tx_ready(USART_COM)) {
-			vTaskDelay(10 / portTICK_PERIOD_MS);
+			
+			while(!usart_is_tx_ready(USART_COM)) {
+				vTaskDelay(10 / portTICK_PERIOD_MS);
+			}
+			usart_write(USART_COM, eof);
 		}
-		usart_write(USART_COM, button1);
 		
-		// envia fim de pacote
-		while(!usart_is_tx_ready(USART_COM)) {
-			vTaskDelay(10 / portTICK_PERIOD_MS);
-		}
-		usart_write(USART_COM, eof);
-
 		// dorme por 500 ms
 		vTaskDelay(500 / portTICK_PERIOD_MS);
 	}
@@ -432,7 +476,10 @@ int main(void) {
 	/* Initialize the console uart */
 	configure_console();
 	
-	xQueueADC = xQueueCreate(5, sizeof(adcData));
+	xQueueBut  = xQueueCreate(10, sizeof(press));
+	xQueueADC  = xQueueCreate(10, sizeof(adcData));
+	xSemaphore = xSemaphoreCreateBinary();
+
 
 	/* Create task to make led blink */
 	if (xTaskCreate(task_bluetooth, "BLT", TASK_BLUETOOTH_STACK_SIZE, NULL,	TASK_BLUETOOTH_STACK_PRIORITY, NULL) != pdPASS) {
@@ -454,7 +501,8 @@ int main(void) {
 	vTaskStartScheduler();
 
   /* RTOS não deve chegar aqui !! */
-	while(1){}
+	while(1){
+	}
 
 	/* Will only get here if there was insufficient memory to create the idle task. */
 	return 0;
