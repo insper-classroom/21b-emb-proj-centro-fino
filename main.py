@@ -40,10 +40,12 @@ def get_exe_path(app: str) -> str:
         if not(subdir.startswith('Windows')):
             for file in files:
                 if file.endswith('.lnk'):
-                    print(get_shortcut_path(f'{subdir}/{file}'))
+                    if app in file:
+                        return get_shortcut_path(f'{subdir}/{file}')
 
 def open_app(app: str) -> None:
     try:
+        app = get_exe_path(app)
         subprocess.run(app)
     except:
         Tk().withdraw()
