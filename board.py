@@ -78,39 +78,61 @@ class SerialControllerInterface:
         self.ser = serial.Serial(port, baudrate=baudrate)
         self.mapping = MyControllerMap()
         self.incoming = '0'
+        self.last_button = ''
         pyautogui.PAUSE = 0  ## remove delay
         
  
     def update(self):
         # Receber qual tecla foi clicada
         #data = self.ser.read()
-        data = self.ser.read(size=2)
-        print(data[0], data[1])
-        if not (data[0] == b'X'):
-            flag = int.from_bytes(data, byteorder='little')
-            data = self.ser.read()
-            button = int.from_bytes(data, byteorder='little')
-            print((button))
-            logging.debug("Received DATA: {}".format(data))
+        encoding = 'utf-8'
+        EOP = 'X'
+        valor_lido = ''
+        list_received_data = []
+        is_eop = False
+        
+        while not is_eop:
+            valor_lido = self.ser.read(size=1)
+            is_eop = (valor_lido == b'X')
+
+            if not is_eop:
+                list_received_data.append(valor_lido)
+                # print(f'Valor lido cru: {valor_lido}')
+                # # print(f'Valor lido encoding: {valor_lido.decode(encoding)}')
+                # print(f'Valor lido decode bytes: {int.from_bytes(valor_lido, byteorder="little")}')
+                # print(f'Valor lido é x? {valor_lido == "X"}')
+                # print('\n')
+
+        print(list_received_data)
+        print('Next package \n')
+
+
+        # print(data[0], data[1])
+        # if not (data[0] == b'X'):
+        #     flag = int.from_bytes(data, byteorder='little')
+        #     data = self.ser.read()
+        #     button = int.from_bytes(data, byteorder='little')
+        #     print((button))
+        #     logging.debug("Received DATA: {}".format(data))
             
-            if flag == 1:         
-                if button == 1:
-                    print('Teams')
-                    open_app('Teams')
+        #     if flag == 1:         
+        #         if button == 1:
+        #             print('Teams')
+        #             open_app('Teams')
                     
-                elif button == 2:
-                    print('Chrome')
-                    open_app('Chrome')
+        #         elif button == 2:
+        #             print('Chrome')
+        #             open_app('Chrome')
                     
-                elif button == 3:
-                    print('VSCode')
-                    open_app('Code')
+        #         elif button == 3:
+        #             print('VSCode')
+        #             open_app('Code')
                     
-                elif button == 4:
-                    print('cmd')
-                    open_app('Command Prompt')
+        #         elif button == 4:
+        #             print('cmd')
+        #             open_app('Command Prompt')
     
-        self.incoming = self.ser.read()
+        # self.incoming = self.ser.read()
  
  
 class DummyControllerInterface:
@@ -146,5 +168,7 @@ if __name__ == '__main__':
             port=args.serial_port, baudrate=args.baudrate)
  
     while True:
-        controller.update()
- 
+        try:
+            controller.update()
+        except:
+            os._exit()

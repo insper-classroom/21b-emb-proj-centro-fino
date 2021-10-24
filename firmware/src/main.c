@@ -247,7 +247,6 @@ void but4_callback() {
 static void task_oled(void *pvParameters) {
 	gfx_mono_ssd1306_init();
 	gfx_mono_draw_string("Exemplo RTOS", 0, 0, &sysfont);
-	gfx_mono_draw_string("oii", 0, 20, &sysfont);
 	
 	adcData adc;
 	
@@ -300,10 +299,10 @@ void io_init(void) {
 	pio_handler_set(BUT3_PIO, BUT3_PIO_ID, BUT3_IDX_MASK, PIO_IT_FALL_EDGE, but3_callback);
 	pio_handler_set(BUT4_PIO, BUT4_PIO_ID, BUT4_IDX_MASK, PIO_IT_FALL_EDGE, but4_callback);
 	
-	pio_set_debounce_filter(BUT1_PIO, BUT1_IDX_MASK, 60);
-	pio_set_debounce_filter(BUT2_PIO, BUT2_IDX_MASK, 60);
-	pio_set_debounce_filter(BUT3_PIO, BUT3_IDX_MASK, 60);
-	pio_set_debounce_filter(BUT4_PIO, BUT4_IDX_MASK, 60);
+	pio_set_debounce_filter(BUT1_PIO, BUT1_IDX_MASK, 80);
+	pio_set_debounce_filter(BUT2_PIO, BUT2_IDX_MASK, 80);
+	pio_set_debounce_filter(BUT3_PIO, BUT3_IDX_MASK, 80);
+	pio_set_debounce_filter(BUT4_PIO, BUT4_IDX_MASK, 80);
 
 	pio_enable_interrupt(BUT1_PIO, BUT1_IDX_MASK);
 	pio_enable_interrupt(BUT2_PIO, BUT2_IDX_MASK);
@@ -394,10 +393,8 @@ static void configure_console(void) {
 /************************************************************************/
 
 void task_adc(void){
-
 	/* inicializa e configura adc */
 	config_AFEC_pot(AFEC_POT, AFEC_POT_ID, AFEC_POT_CHANNEL, AFEC_pot_Callback);
-
 	/* Selecina canal e inicializa conversão */
 	afec_channel_enable(AFEC_POT, AFEC_POT_CHANNEL);
 	afec_start_software_conversion(AFEC_POT);
@@ -411,8 +408,7 @@ void task_adc(void){
 			adc.value = g_ul_value;
 			xQueueSend(xQueueADC, &adc, 0);
 			vTaskDelay(500);
-
-			/* Selecina canal e inicializa conversão */
+			
 			afec_channel_enable(AFEC_POT, AFEC_POT_CHANNEL);
 			afec_start_software_conversion(AFEC_POT);
 		}
@@ -429,33 +425,51 @@ void task_bluetooth(void) {
 	// configura LEDs e Botões
 	io_init();
 	
-	press press_main;
+	press   press_main;
+	adcData adc;
 
-
-	char button1 = '0';
 	char eof = 'X';
 
 	// Task não deve retornar.
 	while(1) {
-				
 		if (xQueueReceive(xQueueBut, &(press_main), ( TickType_t )  1 / portTICK_PERIOD_MS)) {
 			//printf("Button: %d   Status: %d\n", press_main.button, press_main.status);
 			while(!usart_is_tx_ready(USART_COM)) {
 				vTaskDelay(10 / portTICK_PERIOD_MS);
 			}
+			
 			usart_write(USART_COM, press_main.button);
 			
 			while(!usart_is_tx_ready(USART_COM)) {
 				vTaskDelay(10 / portTICK_PERIOD_MS);
 			}
+			
 			usart_write(USART_COM, press_main.status);
-
+			
 			
 			while(!usart_is_tx_ready(USART_COM)) {
 				vTaskDelay(10 / portTICK_PERIOD_MS);
 			}
 			usart_write(USART_COM, eof);
 		}
+		
+		//if (xQueueReceive(xQueueADC, &(adc), (TickType_t)100 / portTICK_PERIOD_MS)){
+			//while(!usart_is_tx_ready(USART_COM)) {
+				//vTaskDelay(10 / portTICK_PERIOD_MS);
+			//}
+			//usart_write(USART_COM, 'P');
+//
+			//while(!usart_is_tx_ready(USART_COM)) {
+				//vTaskDelay(10 / portTICK_PERIOD_MS);
+			//}
+//
+			//usart_write(USART_COM, adc.value);
+			//while(!usart_is_tx_ready(USART_COM)) {
+				//vTaskDelay(10 / portTICK_PERIOD_MS);
+			//}
+			//usart_write(USART_COM, eof);
+//
+		//}
 		
 		// dorme por 500 ms
 		vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -493,9 +507,10 @@ int main(void) {
 	}
 
 	/* Create task to handler LCD */
-	//if (xTaskCreate(task_adc, "adc", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
-		//printf("Failed to create test adc task\r\n");
-	//}
+	
+	if (xTaskCreate(task_adc, "adc", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
+		printf("Failed to create test adc task\r\n");
+	}
 	
 	/* Start the scheduler. */
 	vTaskStartScheduler();
