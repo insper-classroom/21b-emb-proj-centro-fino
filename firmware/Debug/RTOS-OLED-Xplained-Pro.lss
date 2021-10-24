@@ -29,13 +29,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  12 .debug_line   00019ba5  00000000  00000000  0007a13d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_str    00097629  00000000  00000000  00093ce2  2**0
+ 13 .debug_str    000975d3  00000000  00000000  00093ce2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_loc    0000c5b4  00000000  00000000  0012b30b  2**0
+ 14 .debug_loc    0000c5b4  00000000  00000000  0012b2b5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_ranges 000012e0  00000000  00000000  001378bf  2**0
+ 15 .debug_ranges 000012e0  00000000  00000000  00137869  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_frame  00003e38  00000000  00000000  00138ba0  2**2
+ 16 .debug_frame  00003e38  00000000  00000000  00138b4c  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -8283,73 +8283,33 @@ Timer_t * const pxTimer = ( Timer_t * ) listGET_OWNER_OF_HEAD_ENTRY( pxCurrentTi
   4034a8:	004017e1 	.word	0x004017e1
 
 004034ac <usart_serial_putchar>:
- *   \retval 1  The character was written.
- *   \retval 0  The function timed out before the USART transmitter became
- * ready to send.
- */
-static inline int usart_serial_putchar(usart_if p_usart, const uint8_t c)
 {
   4034ac:	b570      	push	{r4, r5, r6, lr}
   4034ae:	460c      	mov	r4, r1
-		while (uart_write((Uart*)p_usart, c)!=0);
-		return 1;
-	}
-#else
-# ifdef UART0
 	if (UART0 == (Uart*)p_usart) {
   4034b0:	4b2a      	ldr	r3, [pc, #168]	; (40355c <usart_serial_putchar+0xb0>)
   4034b2:	4298      	cmp	r0, r3
   4034b4:	d013      	beq.n	4034de <usart_serial_putchar+0x32>
-		while (uart_write((Uart*)p_usart, c)!=0);
-		return 1;
-	}
-# endif
-# ifdef UART1
 	if (UART1 == (Uart*)p_usart) {
   4034b6:	4b2a      	ldr	r3, [pc, #168]	; (403560 <usart_serial_putchar+0xb4>)
   4034b8:	4298      	cmp	r0, r3
   4034ba:	d019      	beq.n	4034f0 <usart_serial_putchar+0x44>
-		while (uart_write((Uart*)p_usart, c)!=0);
-		return 1;
-	}
-# endif
-# ifdef UART2
 	if (UART2 == (Uart*)p_usart) {
   4034bc:	4b29      	ldr	r3, [pc, #164]	; (403564 <usart_serial_putchar+0xb8>)
   4034be:	4298      	cmp	r0, r3
   4034c0:	d01f      	beq.n	403502 <usart_serial_putchar+0x56>
-		while (uart_write((Uart*)p_usart, c)!=0);
-		return 1;
-	}
-# endif
-# ifdef UART3
 	if (UART3 == (Uart*)p_usart) {
   4034c2:	4b29      	ldr	r3, [pc, #164]	; (403568 <usart_serial_putchar+0xbc>)
   4034c4:	4298      	cmp	r0, r3
   4034c6:	d025      	beq.n	403514 <usart_serial_putchar+0x68>
-		while (usart_write(p_usart, c)!=0);
-		return 1;
-	}
-#else
-# ifdef USART0
 	if (USART0 == p_usart) {
   4034c8:	4b28      	ldr	r3, [pc, #160]	; (40356c <usart_serial_putchar+0xc0>)
   4034ca:	4298      	cmp	r0, r3
   4034cc:	d02b      	beq.n	403526 <usart_serial_putchar+0x7a>
-		while (usart_write(p_usart, c)!=0);
-		return 1;
-	}
-# endif
-# ifdef USART1
 	if (USART1 == p_usart) {
   4034ce:	4b28      	ldr	r3, [pc, #160]	; (403570 <usart_serial_putchar+0xc4>)
   4034d0:	4298      	cmp	r0, r3
   4034d2:	d031      	beq.n	403538 <usart_serial_putchar+0x8c>
-		while (usart_write(p_usart, c)!=0);
-		return 1;
-	}
-# endif
-# ifdef USART2
 	if (USART2 == p_usart) {
   4034d4:	4b27      	ldr	r3, [pc, #156]	; (403574 <usart_serial_putchar+0xc8>)
   4034d6:	4298      	cmp	r0, r3
@@ -8594,11 +8554,6 @@ void but4_callback() {
 static void AFEC_pot_Callback(void){
   403680:	b500      	push	{lr}
   403682:	b083      	sub	sp, #12
-static inline uint32_t afec_channel_get_value(Afec *const afec,
-		enum afec_channel_num afec_ch)
-{
-	afec_ch_sanity_check(afec, afec_ch);
-
 	afec->AFEC_CSELR = afec_ch;
   403684:	4a07      	ldr	r2, [pc, #28]	; (4036a4 <AFEC_pot_Callback+0x24>)
   403686:	2300      	movs	r3, #0
@@ -8666,11 +8621,6 @@ void task_adc(void){
   4036e6:	4620      	mov	r0, r4
   4036e8:	4b25      	ldr	r3, [pc, #148]	; (403780 <task_adc+0xcc>)
   4036ea:	4798      	blx	r3
-static inline void afec_channel_set_analog_offset(Afec *const afec,
-		enum afec_channel_num afec_ch, uint16_t aoffset)
-{
-	afec_ch_sanity_check(afec, afec_ch);
-
 	afec->AFEC_CSELR = afec_ch;
   4036ec:	6665      	str	r5, [r4, #100]	; 0x64
 	afec->AFEC_COCR = (aoffset & AFEC_COCR_AOFF_Msk);
@@ -8692,11 +8642,6 @@ static inline void afec_channel_set_analog_offset(Afec *const afec,
   403708:	4620      	mov	r0, r4
   40370a:	4d21      	ldr	r5, [pc, #132]	; (403790 <task_adc+0xdc>)
   40370c:	47a8      	blx	r5
-__STATIC_INLINE void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
-{
-  if(IRQn < 0) {
-    SCB->SHPR[((uint32_t)(IRQn) & 0xF)-4] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff); } /* set Priority for Cortex-M  System Interrupts */
-  else {
     NVIC->IP[(uint32_t)(IRQn)]            = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff); } /* set Priority for device specific Interrupts  */
   40370e:	4b21      	ldr	r3, [pc, #132]	; (403794 <task_adc+0xe0>)
   403710:	2280      	movs	r2, #128	; 0x80
@@ -9019,12 +8964,6 @@ extern void vApplicationTickHook(void) { }
   403920:	4770      	bx	lr
 
 00403922 <vApplicationMallocFailedHook>:
-
-portFORCE_INLINE static void vPortRaiseBASEPRI( void )
-{
-uint32_t ulNewBASEPRI;
-
-	__asm volatile
   403922:	f04f 0380 	mov.w	r3, #128	; 0x80
   403926:	b672      	cpsid	i
   403928:	f383 8811 	msr	BASEPRI, r3
@@ -9128,12 +9067,6 @@ void usart_send_command(Usart *usart, char buffer_rx[], int bufferlen,char buffe
 void config_usart0(void) {
   4039d4:	b5f0      	push	{r4, r5, r6, r7, lr}
   4039d6:	b087      	sub	sp, #28
- *
- * \param ul_id Id (number) of the peripheral clock.
- */
-static inline void sysclk_enable_peripheral_clock(uint32_t ul_id)
-{
-	pmc_enable_periph_clk(ul_id);
   4039d8:	200d      	movs	r0, #13
   4039da:	4c17      	ldr	r4, [pc, #92]	; (403a38 <config_usart0+0x64>)
   4039dc:	47a0      	blx	r4
