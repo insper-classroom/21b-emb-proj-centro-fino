@@ -406,7 +406,7 @@ void task_adc(void){
 
 	while(1){
 		if(xSemaphoreTake(xSemaphore, 0)){
-			printf("%d\n", g_ul_value);
+			//printf("%d\n", g_ul_value);
 			
 			adc.value = g_ul_value;
 			xQueueSend(xQueueADC, &adc, 0);
@@ -439,7 +439,7 @@ void task_bluetooth(void) {
 	while(1) {
 				
 		if (xQueueReceive(xQueueBut, &(press_main), ( TickType_t )  1 / portTICK_PERIOD_MS)) {
-			printf("Button: %d   Status: %d\n", press_main.button, press_main.status);
+			//printf("Button: %d   Status: %d\n", press_main.button, press_main.status);
 			while(!usart_is_tx_ready(USART_COM)) {
 				vTaskDelay(10 / portTICK_PERIOD_MS);
 			}
@@ -493,9 +493,9 @@ int main(void) {
 	}
 
 	/* Create task to handler LCD */
-	if (xTaskCreate(task_adc, "adc", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
-		printf("Failed to create test adc task\r\n");
-	}
+	//if (xTaskCreate(task_adc, "adc", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
+		//printf("Failed to create test adc task\r\n");
+	//}
 	
 	/* Start the scheduler. */
 	vTaskStartScheduler();
