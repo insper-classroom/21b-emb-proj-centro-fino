@@ -36,8 +36,16 @@ def get_shortcut_path(path: str) -> str:
 def get_exe_path(app: str) -> str:
     username = getpass.getuser()
     start_menu = f'C:\\Users\\{username}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs'
+    start_menu2 = f'C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs'
     
     for subdir, dirs, files in os.walk(start_menu):
+        if not(subdir.startswith('Windows')):
+            for file in files:
+                if file.endswith('.lnk'):
+                    if app in file:
+                        return get_shortcut_path(f'{subdir}/{file}')
+                    
+    for subdir, dirs, files in os.walk(start_menu2):
         if not(subdir.startswith('Windows')):
             for file in files:
                 if file.endswith('.lnk'):
