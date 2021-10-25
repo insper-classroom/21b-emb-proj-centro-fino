@@ -18,6 +18,10 @@
 #define LED_IDX      8
 #define LED_IDX_MASK (1 << LED_IDX)
 
+#define LED1_PIO                PIOA
+#define LED1_PIO_ID             ID_PIOA
+#define LED1_IDX                0
+#define LED1_IDX_MASK           (1u << LED1_IDX)
 
 
 /* Botao da placa */
@@ -193,6 +197,18 @@ int usart_get_string(Usart *usart, char buffer[], int bufferlen, uint timeout_ms
 	return counter;
 }
 
+void pisca_led(Pio *PIO, const uint32_t MASK, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		pio_clear(PIO, MASK);
+		delay_ms(5);
+		pio_set(PIO, MASK);
+		delay_ms(5);
+
+	}
+}
+
 void usart_send_command(Usart *usart, char buffer_rx[], int bufferlen,char buffer_tx[], int timeout) {
 	usart_put_string(usart, buffer_tx);
 	usart_get_string(usart, buffer_rx, bufferlen, timeout);
@@ -219,25 +235,34 @@ void but1_callback(void) {
 	press1.button = 1;
 	press1.status = !pio_get(BUT1_PIO, PIO_INPUT, BUT1_IDX_MASK);
 	xQueueSendFromISR(xQueueBut, &press1, 0);
+	pisca_led(LED1_PIO, LED1_IDX_MASK, 2);
 }
 void but2_callback() {
 	press press2;
 	press2.button = 2;
 	press2.status = !pio_get(BUT2_PIO, PIO_INPUT, BUT2_IDX_MASK);
 	xQueueSendFromISR( xQueueBut, &press2, 0);	
+	pisca_led(LED1_PIO, LED1_IDX_MASK, 2);
+
 }
 void but3_callback() {
 	press press3;
 	press3.button = 3;
 	press3.status = !pio_get(BUT3_PIO, PIO_INPUT, BUT3_IDX_MASK);
 	xQueueSendFromISR( xQueueBut, &press3, 0);	
+	pisca_led(LED1_PIO, LED1_IDX_MASK, 2);
+
 }
 void but4_callback() {
 	press press4;
 	press4.button = 4;
 	press4.status = !pio_get(BUT4_PIO, PIO_INPUT, BUT4_IDX_MASK);
 	xQueueSendFromISR( xQueueBut, &press4, 0);	
+	pisca_led(LED1_PIO, LED1_IDX_MASK, 2);
+
 }
+
+
 
 
 /************************************************************************/
@@ -279,6 +304,7 @@ int hc05_init(void) {
 void io_init(void) {
 	// Ativa PIOs
 	pmc_enable_periph_clk(LED_PIO_ID);
+	pmc_enable_periph_clk(LED1_PIO_ID);
 	pmc_enable_periph_clk(BUT1_PIO_ID);
 	pmc_enable_periph_clk(BUT2_PIO_ID);
 	pmc_enable_periph_clk(BUT3_PIO_ID);
@@ -286,6 +312,8 @@ void io_init(void) {
 
 	// Configura Pinos
 	pio_configure(LED_PIO, PIO_OUTPUT_0, LED_IDX_MASK, PIO_DEFAULT | PIO_DEBOUNCE);
+	pio_configure(LED1_PIO, PIO_OUTPUT_0, LED1_IDX_MASK, PIO_DEFAULT | PIO_DEBOUNCE);
+
 	
 	pio_configure(BUT1_PIO, PIO_INPUT, BUT1_IDX_MASK, PIO_PULLUP);
 	pio_configure(BUT2_PIO, PIO_INPUT, BUT2_IDX_MASK, PIO_PULLUP);

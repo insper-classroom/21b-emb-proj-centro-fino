@@ -117,19 +117,19 @@ class SerialControllerInterface:
 
             if  self.verify_pressed_button(pressed_button=botao_apertado, button_idx=1):
                 print('Botão 1 apertado :D\n')
-                open_app('Teams')
+                # open_app('Teams')
 
             elif self.verify_pressed_button(pressed_button=botao_apertado, button_idx=2):
                 print('Botão 2 apertado :D\n')
-                open_app('Code')
+                # open_app('Code')
 
             elif self.verify_pressed_button(pressed_button=botao_apertado, button_idx=3):
                 print('Botão 3 apertado :D\n')
-                open_app('Command Prompt')
+                # open_app('Command Prompt')
 
             elif self.verify_pressed_button(pressed_button=botao_apertado, button_idx=4):
                 print('Botão 4 apertado :D\n')
-                open_app('Chrome')
+                # open_app('Chrome')
             
             self.previous_button = botao_apertado
             
