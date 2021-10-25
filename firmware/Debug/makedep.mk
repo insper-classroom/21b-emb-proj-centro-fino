@@ -2,6 +2,24 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+src\ASF\common\services\sleepmgr\sam\sleepmgr.c
+
+src\ASF\sam\drivers\afec\afec.c
+
+src\ASF\sam\drivers\spi\spi.c
+
+src\oled\gfx_mono_framebuffer.c
+
+src\oled\gfx_mono_generic.c
+
+src\oled\gfx_mono_text.c
+
+src\oled\gfx_mono_ug_2832hsweg04.c
+
+src\oled\ssd1306.c
+
+src\oled\sysfont.c
+
 src\ASF\common\services\clock\same70\sysclk.c
 
 src\ASF\common\services\delay\sam\cycle_counter.c
@@ -25,8 +43,6 @@ src\ASF\sam\drivers\pio\pio_handler.c
 src\ASF\sam\drivers\pmc\pmc.c
 
 src\ASF\sam\drivers\pmc\sleep.c
-
-src\ASF\sam\drivers\tc\tc.c
 
 src\ASF\sam\drivers\uart\uart.c
 

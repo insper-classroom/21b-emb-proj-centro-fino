@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief SAME70-XPLAINED board configuration.
+ * \brief SAME70 Xplained board configuration
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -38,19 +38,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * \asf_license_stop
- *
  */
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H_INCLUDED
-#define CONF_BOARD_H_INCLUDED
+#ifndef CONF_BOARD_H
+#define CONF_BOARD_H
 
 /* Enable ICache and DCache */
 #define CONF_BOARD_ENABLE_CACHE
 
-/* Configure UART pins */
 #define CONF_BOARD_UART_CONSOLE
 
-#endif /* CONF_BOARD_H_INCLUDED */
+#define SSD1306_DC_PIN               PIO_PB3_IDX
+#define SSD1306_RES_PIN              PIO_PC17_IDX
+#define GFX_MONO_UG_2832HSWEG04
+#define CONFIG_SSD1306_FRAMEBUFFER
+#endif /* CONF_BOARD_H */
