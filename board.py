@@ -1,5 +1,5 @@
 import pyautogui, serial, argparse, time, logging, numpy as np, os, subprocess, getpass, struct, platform
-#import alsaaudio
+from pycaw.pycaw import AudioUtilities, ISimpleAudioVolume
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from pathlib import Path
@@ -39,35 +39,50 @@ def get_exe_path(app: str) -> str:
     start_menu2 = f'C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs'
     
     for subdir, dirs, files in os.walk(start_menu):
-        if not(subdir.startswith('Windows')):
-            for file in files:
-                if file.endswith('.lnk'):
-                    if app in file:
-                        return get_shortcut_path(f'{subdir}/{file}')
+        for file in files:
+            if file.endswith('.lnk'):
+                if app.lower() in file.lower():
+                    return get_shortcut_path(f'{subdir}/{file}')
                     
     for subdir, dirs, files in os.walk(start_menu2):
-        if not(subdir.startswith('Windows')):
-            for file in files:
-                if file.endswith('.lnk'):
-                    if app in file:
-                        return get_shortcut_path(f'{subdir}/{file}')
+        for file in files:
+            if file.endswith('.lnk'):
+                if app.lower() in file.lower():
+                    return get_shortcut_path(f'{subdir}/{file}')
 
 def open_app(app: str) -> None:
     try:
         path = get_exe_path(app)
         subprocess.Popen(path)
     except:
-        Tk().withdraw()
-        path = askopenfilename(title=f'Escolha o arquivo executável para {app}', initialdir=Path.home(), filetypes=[('Arquivo executável', '*.exe')])
-        subprocess.Popen(path)
         username = getpass.getuser()
-        with open(f'doc/mem/{username}.txt', 'w+') as log:
-            log.write(f'{app}=={path}')
+        achou = False
+        with open(f'doc/mem/{username}.txt', 'r') as log:
+            lines = log.readlines()
+            if lines:
+                for line in lines:
+                    app_l = line.split('=')[0]
+                    if app_l.lower() == app.lower():
+                        path = line.split('=')[1]
+                        achou = True
+                        break
+        if not achou:
+            Tk().withdraw()
+            path = askopenfilename(title=f'Escolha o arquivo executável para {app}', initialdir=Path.home(), filetypes=[('Arquivo executável', '*.exe')])
+            with open(f'doc/mem/{username}.txt', 'w+') as log:
+                log.write(f'{app}=={path}')
+                
+        subprocess.Popen(path)
+
+def set_volume(percent: int) -> None:
+    sessions = AudioUtilities.GetAllSessions()
+    for session in sessions:
+        volume = session._ctl.QueryInterface(ISimpleAudioVolume)
+        volume.SetMasterVolume((percent/100), None)
 
 class MyControllerMap:
     def __init__(self):
         self.button = {'T': '', 'G': '', 'V': '', 'C': ''}
- 
  
 class SerialControllerInterface:
     # Protocolo
@@ -111,56 +126,30 @@ class SerialControllerInterface:
             valor_byte = list_received_data[1]
             valor = int.from_bytes(valor_byte, byteorder="little")
             print(f'Valor potenciometro: {valor} %')
+            set_volume(valor)
 
         else:
             botao_apertado = self.decode(first_element)
 
             if  self.verify_pressed_button(pressed_button=botao_apertado, button_idx=1):
-                print('Botão 1 apertado :D\n')
-                # open_app('Teams')
+                print('Botão 1 apertado :D')
+                open_app('Chrome')
 
             elif self.verify_pressed_button(pressed_button=botao_apertado, button_idx=2):
-                print('Botão 2 apertado :D\n')
-                # open_app('Code')
+                print('Botão 2 apertado :D')
+                open_app('Code')
 
             elif self.verify_pressed_button(pressed_button=botao_apertado, button_idx=3):
-                print('Botão 3 apertado :D\n')
-                # open_app('Command Prompt')
+                print('Botão 3 apertado :D')
+                open_app('Steam')
 
             elif self.verify_pressed_button(pressed_button=botao_apertado, button_idx=4):
-                print('Botão 4 apertado :D\n')
-                # open_app('Chrome')
+                print('Botão 4 apertado :D')
+                open_app('Teams')
             
             self.previous_button = botao_apertado
             
-        print('Next package \n')
-
-        # print(data[0], data[1])
-        # if not (data[0] == b'X'):
-        #     flag = int.from_bytes(data, byteorder='little')
-        #     data = self.ser.read()
-        #     button = int.from_bytes(data, byteorder='little')
-        #     print((button))
-        #     logging.debug("Received DATA: {}".format(data))
-            
-        #     if flag == 1:         
-        #         if button == 1:
-        #             print('Teams')
-        #             open_app('Teams')
-                    
-        #         elif button == 2:
-        #             print('Chrome')
-        #             open_app('Chrome')
-                    
-        #         elif button == 3:
-        #             print('VSCode')
-        #             open_app('Code')
-                    
-        #         elif button == 4:
-        #             print('cmd')
-        #             open_app('Command Prompt')
-    
-        # self.incoming = self.ser.read()
+        print('Next package')
  
  
 class DummyControllerInterface:
