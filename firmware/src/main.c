@@ -452,7 +452,7 @@ void task_bluetooth(void) {
 		}
 		
 		
-		if (xQueueReceive(xQueueADC, &(adc), (TickType_t)100 / portTICK_PERIOD_MS)) {
+		if (xQueueReceive(xQueueADC, &(adc), (TickType_t)1 / portTICK_PERIOD_MS)) {
 			//Busca um novo valor na fila do ADC!
 			char b[512];
 			sprintf(b, "%04d", adc.value);
@@ -468,7 +468,7 @@ void task_bluetooth(void) {
 			}
 
 
-			usart_write(USART_COM, adc.value);
+			usart_write(USART_COM, (adc.value / 41)); //divisao por 41 faz o potenciometro ficar em um range de 0 a 100
 			
 			while(!usart_is_tx_ready(USART_COM)) {
 				vTaskDelay(10 / portTICK_PERIOD_MS);
@@ -476,8 +476,8 @@ void task_bluetooth(void) {
 			usart_write(USART_COM, eof);
 		}
 		
-		// dorme por 500 ms
-		vTaskDelay(500 / portTICK_PERIOD_MS);
+		// dorme por 50 ms
+		vTaskDelay(50 / portTICK_PERIOD_MS);
 	}
 }
 

@@ -78,9 +78,15 @@ class SerialControllerInterface:
         self.ser = serial.Serial(port, baudrate=baudrate)
         self.mapping = MyControllerMap()
         self.incoming = '0'
-        self.last_button = ''
+        self.previous_button = ''
         pyautogui.PAUSE = 0  ## remove delay
-        
+    
+    def decode(self, bytes):
+        int_value = int.from_bytes(bytes, byteorder="little")
+        return int_value
+
+    def verify_pressed_button(self, pressed_button, button_idx):
+        return ((pressed_button == button_idx) and (self.previous_button != pressed_button))
  
     def update(self):
         # Receber qual tecla foi clicada
@@ -97,19 +103,37 @@ class SerialControllerInterface:
 
             if not is_eop:
                 list_received_data.append(valor_lido)
-                # print(f'Valor lido cru: {valor_lido}')
-                # # print(f'Valor lido encoding: {valor_lido.decode(encoding)}')
-                # print(f'Valor lido decode bytes: {int.from_bytes(valor_lido, byteorder="little")}')
-                # print(f'Valor lido é x? {valor_lido == "X"}')
-                # print('\n')
 
-        print(list_received_data)
-        if list_received_data[0] == b'P':
+        # print(list_received_data)
+        first_element = list_received_data[0]
+
+        if first_element == b'P':
             valor_byte = list_received_data[1]
             valor = int.from_bytes(valor_byte, byteorder="little")
-            print(f'Valor potenciometro: {valor}')
-        print('Next package \n')
+            print(f'Valor potenciometro: {valor} %')
 
+        else:
+            botao_apertado = self.decode(first_element)
+
+            if  self.verify_pressed_button(pressed_button=botao_apertado, button_idx=1):
+                print('Botão 1 apertado :D\n')
+                open_app('Teams')
+
+            elif self.verify_pressed_button(pressed_button=botao_apertado, button_idx=2):
+                print('Botão 2 apertado :D\n')
+                open_app('Code')
+
+            elif self.verify_pressed_button(pressed_button=botao_apertado, button_idx=3):
+                print('Botão 3 apertado :D\n')
+                open_app('Command Prompt')
+
+            elif self.verify_pressed_button(pressed_button=botao_apertado, button_idx=4):
+                print('Botão 4 apertado :D\n')
+                open_app('Chrome')
+            
+            self.previous_button = botao_apertado
+            
+        print('Next package \n')
 
         # print(data[0], data[1])
         # if not (data[0] == b'X'):
