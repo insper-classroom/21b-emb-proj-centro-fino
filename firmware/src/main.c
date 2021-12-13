@@ -30,25 +30,25 @@
 #define BUT_PIO_PIN 11
 #define BUT_PIO_PIN_MASK (1 << BUT_PIO_PIN)
 
-// Botão1 PD28 (por enquanto oled) PA2
+// BotÃ£o1 PD28 (por enquanto oled) PA2
 #define BUT1_PIO      PIOA
 #define BUT1_PIO_ID   ID_PIOA
 #define BUT1_IDX      2
 #define BUT1_IDX_MASK (1 << BUT1_IDX)
 
-// Botão1 PC31 (por enquanto oled) PA3
+// BotÃ£o1 PC31 (por enquanto oled) PA3
 #define BUT2_PIO	   PIOA
 #define BUT2_PIO_ID	   ID_PIOA
 #define BUT2_IDX       3
 #define BUT2_IDX_MASK  (1u << BUT2_IDX)
 
-// Botão1 PC31 (por enquanto oled)  PA4
+// BotÃ£o1 PC31 (por enquanto oled)  PA4
 #define BUT3_PIO	   PIOA
 #define BUT3_PIO_ID	   ID_PIOA
 #define BUT3_IDX       4
 #define BUT3_IDX_MASK  (1u << BUT3_IDX)
 
-// Botão1 PC31 (por enquanto oled)  PA21
+// BotÃ£o1 PC31 (por enquanto oled)  PA21
 #define BUT4_PIO	   PIOA
 #define BUT4_PIO_ID	   ID_PIOA
 #define BUT4_IDX       21
@@ -350,7 +350,7 @@ void io_init(void) {
 static void BUT_init(void) {
 
 
-	/* conf botão como entrada */
+	/* conf botÃ£o como entrada */
 }
 
 static void config_AFEC_pot(Afec *afec, uint32_t afec_id, uint32_t afec_channel, afec_callback_t callback){
@@ -372,7 +372,7 @@ static void config_AFEC_pot(Afec *afec, uint32_t afec_id, uint32_t afec_channel,
   /* Configura trigger por software */
   afec_set_trigger(afec, AFEC_TRIG_SW);
 
-  /*** Configuracao específica do canal AFEC ***/
+  /*** Configuracao especÃ­fica do canal AFEC ***/
   struct afec_ch_config afec_ch_cfg;
   afec_ch_get_config_defaults(&afec_ch_cfg);
   afec_ch_cfg.gain = AFEC_GAINVALUE_0;
@@ -421,7 +421,7 @@ static void configure_console(void) {
 void task_adc(void){
 	/* inicializa e configura adc */
 	config_AFEC_pot(AFEC_POT, AFEC_POT_ID, AFEC_POT_CHANNEL, AFEC_pot_Callback);
-	/* Selecina canal e inicializa conversão */
+	/* Selecina canal e inicializa conversÃ£o */
 	afec_channel_enable(AFEC_POT, AFEC_POT_CHANNEL);
 	afec_start_software_conversion(AFEC_POT);
 	
@@ -448,7 +448,7 @@ void task_bluetooth(void) {
 	config_usart0();
 	hc05_init();
 
-	// configura LEDs e Botões
+	// configura LEDs e BotÃµes
 	io_init();
 	
 	press   press_main;
@@ -456,7 +456,7 @@ void task_bluetooth(void) {
 
 	char eof = 'X';
 
-	// Task não deve retornar.
+	// Task nÃ£o deve retornar.
 	while(1) {
 		if (xQueueReceive(xQueueBut, &(press_main), ( TickType_t )  1 / portTICK_PERIOD_MS)) {
 			//printf("Button: %d   Status: %d\n", press_main.button, press_main.status);
@@ -505,7 +505,7 @@ void task_bluetooth(void) {
 		}
 		
 		// dorme por 50 ms
-		vTaskDelay(50 / portTICK_PERIOD_MS);
+		//vTaskDelay(50 / portTICK_PERIOD_MS);
 	}
 }
 
@@ -552,7 +552,7 @@ int main(void) {
 	/* Start the scheduler. */
 	vTaskStartScheduler();
 
-  /* RTOS não deve chegar aqui !! */
+  /* RTOS nÃ£o deve chegar aqui !! */
 	while(1){
 	}
 
